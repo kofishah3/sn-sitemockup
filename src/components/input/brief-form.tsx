@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
 
+import { Link } from "react-router-dom";
+
 const SERVICES = [
   "Executive Assistance",
   "Marketing Support",
@@ -12,9 +14,13 @@ const SERVICES = [
 
 interface BriefFormProps {
   variant?: "light" | "dark";
+  showContactLink?: boolean;
 }
 
-export default function BriefForm({ variant = "dark" }: BriefFormProps) {
+export default function BriefForm({
+  variant = "dark",
+  showContactLink = true,
+}: BriefFormProps) {
   const isLight = variant === "light";
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("");
@@ -68,8 +74,8 @@ export default function BriefForm({ variant = "dark" }: BriefFormProps) {
     : "px-4 py-3 text-sm text-gray-300 hover:bg-accent hover:text-white cursor-pointer transition-colors";
 
   const footerLinkClasses = isLight
-    ? "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent underline decoration-gray-300 underline-offset-8"
-    : "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent-mid underline underline-offset-8";
+    ? "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent underline decoration-gray-300 underline-offset-8 mt-4"
+    : "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent-mid underline underline-offset-8 mt-4";
 
   return (
     <div className="relative z-10 w-full max-w-xl mx-auto">
@@ -145,9 +151,16 @@ export default function BriefForm({ variant = "dark" }: BriefFormProps) {
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
 
-        <div id="access-contact" className={footerLinkClasses}>
-          Prefer to contact us directly?
-        </div>
+        {showContactLink && (
+          <Link
+            to="/contact"
+            id="access-contact"
+            className={footerLinkClasses}
+            onClick={() => window.scrollTo(0, 0)}
+          >
+            Prefer to contact us directly?
+          </Link>
+        )}
       </form>
     </div>
   );
