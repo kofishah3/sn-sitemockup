@@ -36,7 +36,7 @@ export default function Hero() {
       <h1
         id="heroH1"
         ref={h1Ref}
-        className="font-display text-7xl font-extrabold leading-[0.98] tracking-tight text-black max-w-[780px] mb-7 opacity-0 translate-y-5"
+        className="font-display text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[0.98] tracking-tight text-black max-w-[780px] mb-7 opacity-0 translate-y-5"
       >
         You're one brief away
         <br />

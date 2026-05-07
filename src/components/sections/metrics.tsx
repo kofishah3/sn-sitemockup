@@ -25,7 +25,7 @@ export default function Metrics() {
     <section
       id="metrics"
       ref={sectionRef}
-      className="w-full bg-cream  border-gray-200 grid grid-cols-1 md:grid-cols-3"
+      className="w-full bg-cream border-gray-200 grid grid-cols-1 md:grid-cols-3 border-y"
     >
       {metrics.map((metric, idx) => (
         <div

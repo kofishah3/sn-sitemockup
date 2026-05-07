@@ -69,15 +69,15 @@ export default function Services() {
   return (
     <div
       id="services-sticky"
-      className="h-screen bg-bg flex flex-col items-center justify-center mt-60"
+      className="min-h-screen bg-bg flex flex-col items-center py-24"
     >
       <div
         id="header"
-        className="w-fill h-auto py-10 items-center justify-center flex flex-col gap-5 mb-10"
+        className="w-fill h-auto max-w-xl md:max-w-3xl py-10 items-center justify-center flex flex-col gap-5 mb-10"
       >
-        <h2 className="font-extrabold text-5xl max-w-3xl text-center">
-          <span className="text-accent">Service</span> tracks built for modern
-          teams
+        <h2 className="font-extrabold text-4xl lg:text-5xl max-w-3xl text-center">
+          <span className="text-accent italic"> Service </span> tracks built for
+          modern teams
         </h2>
         <p className="text-lg max-w-3xl text-center">
           Start with the function you need most. We shape support around the
@@ -91,6 +91,7 @@ export default function Services() {
       >
         {services.map((service) => (
           <SectionCard
+            key={service.id}
             icon={service.icon}
             title={service.title}
             description={service.description}
