@@ -1,26 +1,37 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import TopNavBar from "./components/navigation/top-navbar";
+import SubmitBrief from "./components/sections/submit-brief";
 import Hero from "./components/sections/hero";
 import Metrics from "./components/sections/metrics";
 import Services from "./components/sections/services";
+import ContactPage from "./pages/contact";
 
-function App() {
+import Footer from "./components/navigation/footer";
+
+function HomePage() {
   return (
-    <main className="min-h-screen w-full bg-bg text-black font-body scroll-smooth">
+    <>
       <TopNavBar />
       <Hero />
       <Metrics />
       <Services />
+      <SubmitBrief />
+      <Footer />
+    </>
+  );
+}
 
-      <div
-        id="cta"
-        className="h-screen bg-white flex items-center justify-center"
-      >
-        <h2 className="text-4xl font-display font-bold">
-          CTA / Contact Section
-        </h2>
-      </div>
-    </main>
+function App() {
+  return (
+    <BrowserRouter>
+      <main className="min-h-screen w-full bg-bg text-black font-body scroll-smooth">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
+      </main>
+    </BrowserRouter>
   );
 }
 
