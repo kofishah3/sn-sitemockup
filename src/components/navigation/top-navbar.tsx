@@ -93,10 +93,25 @@ export default function TopNavBar({}: TopNavBarProps) {
 
   const navLinks = [
     { name: "Home", href: "/", isExternal: false, sectionId: "hero" },
-    { name: "Services", href: "/#services-sticky", isExternal: false, sectionId: "services-sticky" },
+    {
+      name: "Services",
+      href: "/#services-sticky",
+      isExternal: false,
+      sectionId: "services-sticky",
+    },
     { name: "About Us", href: "/#cta", isExternal: false, sectionId: "cta" },
-    { name: "Meet the Team", href: "/#cta", isExternal: false, sectionId: "cta" },
-    { name: "Contact", href: "/contact", isExternal: true, sectionId: "contact" },
+    {
+      name: "Meet the Team",
+      href: "/#cta",
+      isExternal: false,
+      sectionId: "cta",
+    },
+    {
+      name: "Contact",
+      href: "/contact",
+      isExternal: true,
+      sectionId: "contact",
+    },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -152,7 +167,7 @@ export default function TopNavBar({}: TopNavBarProps) {
         >
           {navLinks.map((link) => {
             const isActive = activeSection === link.sectionId;
-            
+
             if (link.isExternal) {
               return (
                 <Link
@@ -211,7 +226,18 @@ export default function TopNavBar({}: TopNavBarProps) {
           })}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
+          <button
+            id="desktop-login"
+            className={`hidden sm:block text-sm font-medium transition-colors duration-300 cursor-pointer ${
+              isDarkBg
+                ? "text-white/70 hover:text-white"
+                : "text-gray-600 hover:text-black"
+            }`}
+          >
+            Log In
+          </button>
+
           <button
             id="desktop-getstarted"
             onClick={() => {
@@ -256,7 +282,7 @@ export default function TopNavBar({}: TopNavBarProps) {
         >
           {navLinks.map((link) => {
             const isActive = activeSection === link.sectionId;
-            
+
             if (link.isExternal) {
               return (
                 <Link
@@ -285,6 +311,10 @@ export default function TopNavBar({}: TopNavBarProps) {
               </a>
             );
           })}
+          <button className="text-2xl font-display font-bold tracking-tight text-gray-400 hover:text-black transition-colors cursor-pointer">
+            Log In
+          </button>
+
           <button
             onClick={() => {
               setIsMenuOpen(false);
@@ -296,7 +326,7 @@ export default function TopNavBar({}: TopNavBarProps) {
                 window.location.href = "/#cta";
               }
             }}
-            className="mt-4 bg-black text-white rounded-[40px] px-8 py-4 text-sm font-medium font-body transition-all duration-200 hover:bg-gray-600 hover:scale-[0.97] tracking-[0.02em]"
+            className="mt-2 bg-black text-white rounded-[40px] px-8 py-4 text-sm font-medium font-body transition-all duration-200 hover:bg-gray-600 hover:scale-[0.97] tracking-[0.02em]"
           >
             Get Started →
           </button>

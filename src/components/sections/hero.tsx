@@ -108,20 +108,6 @@ export default function Hero() {
           className="text-black animate-bounce transition-colors hover:text-accent"
         />
       </div>
-
-      <style>{`
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-        .animate-bounce {
-          animation: bounce 2s infinite ease-in-out;
-        }
-      `}</style>
     </section>
   );
 }
