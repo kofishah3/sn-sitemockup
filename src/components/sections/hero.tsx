@@ -6,7 +6,6 @@ import { ChevronDownCircle } from "lucide-react";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -16,8 +15,7 @@ export default function Hero() {
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1 } });
 
-    tl.to(badgeRef.current, { opacity: 1, y: 0, delay: 0.8 })
-      .to(h1Ref.current, { opacity: 1, y: 0 }, "-=0.7")
+    tl.to(h1Ref.current, { opacity: 1, y: 0 }, "-=0.7")
       .to(subRef.current, { opacity: 1, y: 0 }, "-=0.7")
       .to(ctaRef.current, { opacity: 1, y: 0 }, "-=0.7")
       .to(pillsRef.current, { opacity: 1, y: 0 }, "-=0.7")
