@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-black: #0e0e0c;
+  --color-white: #f7f6f2;
+  --color-cream: #f0ede6;
+
+  --color-gray-100: #e8e4dc;
+  --color-gray-200: #d4cfc5;
+  --color-gray-400: #9e9a91;
+  --color-gray-600: #5c5952;
+
+  --color-accent: #2d5be3;
+  --color-accent-light: #e8eefb;
+  --color-accent-mid: #6b8ef0;
+
+  --color-bg: var(--color-white);
+  --color-surface: var(--color-cream);
+
+  --font-display: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+}
+
+:root {
+  --black: #0e0e0c;
+  --white: #f7f6f2;
+  --cream: #f0ede6;
+  --gray-100: #e8e4dc;
+  --gray-200: #d4cfc5;
+  --gray-400: #9e9a91;
+  --gray-600: #5c5952;
+  --accent: #2d5be3;
+  --accent-light: #e8eefb;
+  --accent-mid: #6b8ef0;
+  --font-display: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+    @apply antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+  }
+}
