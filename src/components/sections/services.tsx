@@ -1,11 +1,9 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BotMessageSquare, Folder, Megaphone, Pencil } from "lucide-react";
 import SectionCard from "../ui/section-card";
 import { useSelection } from "../../context/SelectionContext";
 
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
   const { setSelectedService } = useSelection();
@@ -14,6 +12,17 @@ export default function Services() {
   const headerRef = useRef<HTMLDivElement>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  const scrollToCTA = () => {
+    const el = document.getElementById("cta");
+    if (el) {
+      gsap.to(window, {
+        duration: 1.2,
+        scrollTo: { y: el, offsetY: 80 },
+        ease: "power4.inOut",
+      });
+    }
+  };
 
   const services = [
     {
@@ -201,9 +210,7 @@ export default function Services() {
                 metrics={service.metrics as Record<string, string>[]}
                 onAction={() => {
                   setSelectedService(service.title);
-                  document
-                    .getElementById("cta")
-                    ?.scrollIntoView({ behavior: "smooth" });
+                  scrollToCTA();
                 }}
               />
             </div>

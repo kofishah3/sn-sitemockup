@@ -23,7 +23,7 @@ const InteractiveBackground: React.FC = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-white">
+    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
       <div className="absolute inset-0 opacity-[0.04] mix-blend-multiply">
         <svg
           viewBox="0 0 512 512"
@@ -43,7 +43,7 @@ const InteractiveBackground: React.FC = () => {
       </div>
 
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.05]"
         style={{
           backgroundImage: `
             linear-gradient(to right, var(--gray-400) 1px, transparent 1px),

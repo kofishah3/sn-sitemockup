@@ -1,10 +1,8 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, ExternalLink } from "lucide-react";
 import Button from "../ui/button";
 
-gsap.registerPlugin(ScrollTrigger);
 
 export default function DiscoveryCall() {
   const sectionRef = useRef<HTMLElement>(null);

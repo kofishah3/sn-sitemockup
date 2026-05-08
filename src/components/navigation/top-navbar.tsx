@@ -1,12 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import gsap from "gsap";
 import { Menu, X } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useModal } from "../../context/ModalContext";
+
 
 interface TopNavBarProps {}
 
 export default function TopNavBar({}: TopNavBarProps) {
+  const { openOutOfScope } = useModal();
   const [isScrolled, setIsScrolled] = useState(false);
+
   const [isDarkBg, setIsDarkBg] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
@@ -14,6 +19,7 @@ export default function TopNavBar({}: TopNavBarProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const menuLinksRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,7 +53,7 @@ export default function TopNavBar({}: TopNavBarProps) {
 
     const ctx = gsap.context(() => {
       window.addEventListener("scroll", handleScroll, { passive: true });
-      handleScroll(); // Initial check
+      handleScroll();
 
       if (navRef.current) {
         gsap.fromTo(
@@ -55,8 +61,7 @@ export default function TopNavBar({}: TopNavBarProps) {
           { opacity: 0 },
           {
             opacity: 1,
-            duration: 0.8,
-            delay: 0.5,
+            duration: 0.5,
             ease: "power2.out",
           },
         );
@@ -101,25 +106,48 @@ export default function TopNavBar({}: TopNavBarProps) {
     }
   }, [isMenuOpen]);
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80;
+      gsap.to(window, {
+        duration: 1.2,
+        scrollTo: { y: element, offsetY: offset },
+        ease: "power4.inOut",
+      });
+    }
+  };
+
+  const handleNavClick = (
+    e: React.MouseEvent,
+    href: string,
+    sectionId?: string,
+  ) => {
+    if (location.pathname === "/" && sectionId) {
+      e.preventDefault();
+      scrollToSection(sectionId);
+      if (isMenuOpen) setIsMenuOpen(false);
+    } else if (href.startsWith("/#") && location.pathname !== "/") {
+    }
+  };
+
   const navLinks = [
-    { name: "Home", href: "/", isExternal: true, sectionId: "hero" },
+    { name: "Home", href: "/", sectionId: "hero" },
     {
       name: "Services",
       href: "/#services-sticky",
-      isExternal: false,
       sectionId: "services-sticky",
     },
-    { name: "About Us", href: "/#cta", isExternal: false, sectionId: "cta" },
+    { name: "About Us", href: "#", onClick: (e: React.MouseEvent) => { e.preventDefault(); openOutOfScope(); } },
     {
       name: "Meet the Team",
-      href: "/#cta",
-      isExternal: false,
-      sectionId: "cta",
+      href: "#",
+      onClick: (e: React.MouseEvent) => { e.preventDefault(); openOutOfScope(); }
     },
+
     {
       name: "Contact",
       href: "/contact",
-      isExternal: false,
       sectionId: "contact",
     },
   ];
@@ -177,8 +205,9 @@ export default function TopNavBar({}: TopNavBarProps) {
         >
           {navLinks.map((link) => {
             const isActive = activeSection === link.sectionId;
+            const isRoute = link.href === "/contact";
 
-            if (link.isExternal) {
+            if (isRoute) {
               return (
                 <Link
                   key={link.name}
@@ -211,6 +240,8 @@ export default function TopNavBar({}: TopNavBarProps) {
               <a
                 key={link.name}
                 href={link.href}
+                onClick={link.onClick || ((e) => handleNavClick(e, link.href as string, link.sectionId))}
+
                 className={`text-[13px] transition-all duration-300 relative group ${
                   isActive
                     ? isDarkBg
@@ -239,6 +270,7 @@ export default function TopNavBar({}: TopNavBarProps) {
         <div className="flex items-center gap-6">
           <button
             id="desktop-login"
+            onClick={openOutOfScope}
             className={`hidden sm:block text-sm font-medium transition-colors duration-300 cursor-pointer ${
               isDarkBg
                 ? "text-white/70 hover:text-white"
@@ -248,15 +280,14 @@ export default function TopNavBar({}: TopNavBarProps) {
             Log In
           </button>
 
+
           <button
             id="desktop-getstarted"
             onClick={() => {
               if (location.pathname === "/") {
-                document
-                  .getElementById("cta")
-                  ?.scrollIntoView({ behavior: "smooth" });
+                scrollToSection("cta");
               } else {
-                window.location.href = "/#cta";
+                navigate("/#cta");
               }
             }}
             className={`hidden sm:block rounded-[40px] px-[22px] py-2.5 text-[12px] font-medium font-body transition-all duration-300 tracking-[0.02em] cursor-pointer ${
@@ -292,8 +323,9 @@ export default function TopNavBar({}: TopNavBarProps) {
         >
           {navLinks.map((link) => {
             const isActive = activeSection === link.sectionId;
+            const isRoute = link.href === "/contact";
 
-            if (link.isExternal) {
+            if (isRoute) {
               return (
                 <Link
                   key={link.name}
@@ -312,7 +344,8 @@ export default function TopNavBar({}: TopNavBarProps) {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setIsMenuOpen(false)}
+                onClick={link.onClick || ((e) => handleNavClick(e, link.href as string, link.sectionId))}
+
                 className={`text-2xl font-display font-bold tracking-tight transition-colors ${
                   isActive ? "text-black" : "text-gray-400 hover:text-black"
                 }`}
@@ -321,19 +354,21 @@ export default function TopNavBar({}: TopNavBarProps) {
               </a>
             );
           })}
-          <button className="text-2xl font-display font-bold tracking-tight text-gray-400 hover:text-black transition-colors cursor-pointer">
+          <button 
+            onClick={() => { setIsMenuOpen(false); openOutOfScope(); }}
+            className="text-2xl font-display font-bold tracking-tight text-gray-400 hover:text-black transition-colors cursor-pointer"
+          >
             Log In
           </button>
 
+
           <button
             onClick={() => {
-              setIsMenuOpen(false);
               if (location.pathname === "/") {
-                document
-                  .getElementById("cta")
-                  ?.scrollIntoView({ behavior: "smooth" });
+                scrollToSection("cta");
+                setIsMenuOpen(false);
               } else {
-                window.location.href = "/#cta";
+                navigate("/#cta");
               }
             }}
             className="mt-2 bg-black text-white rounded-[40px] px-8 py-4 text-sm font-medium font-body transition-all duration-200 hover:bg-gray-600 hover:scale-[0.97] tracking-[0.02em]"

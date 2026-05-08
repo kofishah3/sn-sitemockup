@@ -9,11 +9,14 @@ import ContactPage from "./pages/contact";
 import Footer from "./components/navigation/footer";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SelectionProvider } from "./context/SelectionContext";
+import { ModalProvider } from "./context/ModalContext";
+import OutOfScopeModal from "./components/ui/OutOfScopeModal";
 import InteractiveBackground from "./components/ui/interactive-background";
 import ScrollToTop from "./components/navigation/scroll-to-top";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 function HomePage() {
   return (
@@ -28,13 +31,14 @@ function HomePage() {
 
 function AppContent() {
   const location = useLocation();
-  
+
   return (
-    <main className="min-h-screen w-full text-black font-body scroll-smooth flex flex-col relative overflow-x-hidden">
+    <main className="min-h-screen w-full text-black font-body flex flex-col relative overflow-x-hidden">
       <InteractiveBackground />
+      <OutOfScopeModal />
       <TopNavBar />
-      <div className="grow relative z-10">
-        <Routes key={location.pathname}>
+      <div className="grow relative z-10" key={location.pathname}>
+        <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
@@ -46,14 +50,15 @@ function AppContent() {
 
 function App() {
   return (
-    <SelectionProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <AppContent />
-      </BrowserRouter>
-    </SelectionProvider>
+    <ModalProvider>
+      <SelectionProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <AppContent />
+        </BrowserRouter>
+      </SelectionProvider>
+    </ModalProvider>
   );
 }
 
 export default App;
-
