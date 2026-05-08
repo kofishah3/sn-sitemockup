@@ -9,7 +9,6 @@ export default function OutOfScopeModal() {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-
   useEffect(() => {
     if (isOutOfScopeOpen) {
       document.body.style.overflow = "hidden";
