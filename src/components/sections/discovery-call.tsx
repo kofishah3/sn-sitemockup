@@ -1,9 +1,40 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Calendar, ExternalLink } from "lucide-react";
 import Button from "../ui/button";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function DiscoveryCall() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (sectionRef.current) {
+        gsap.from(sectionRef.current, {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 95%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: 30,
+          scale: 0.98,
+          duration: 1,
+          ease: "power3.out",
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="w-full max-w-4xl bg-[#f0f9fc] rounded-[32px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 border border-accent/10 relative overflow-hidden group">
+    <section
+      ref={sectionRef}
+      className="w-full max-w-4xl bg-[#f0f9fc] rounded-[32px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 border border-accent/10 relative overflow-hidden group"
+    >
       <div className="flex flex-col gap-5 text-left relative z-10">
         <div className="flex flex-col gap-2">
           <h3 className="font-display text-3xl md:text-4xl font-bold text-black leading-tight tracking-tight">

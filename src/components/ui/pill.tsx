@@ -8,6 +8,7 @@ interface PillProps {
   className?: string;
   id?: string;
   variant?: "light" | "dark";
+  onClick?: () => void;
 }
 
 export default function Pill({
@@ -16,6 +17,7 @@ export default function Pill({
   className = "",
   id,
   variant = "light",
+  onClick,
 }: PillProps) {
   const isDark = variant === "dark";
 
@@ -41,8 +43,11 @@ export default function Pill({
   return (
     <span
       id={id}
+      onClick={onClick}
       className={`inline-flex items-center gap-1.5 border rounded-full 
-        px-3.5 py-1.5 text-xs cursor-default transition-all duration-300 
+        px-3.5 py-1.5 text-xs whitespace-nowrap shrink-0 ${
+          onClick ? "cursor-pointer" : "cursor-default"
+        } transition-all duration-300 
         ${variantClasses} ${className}`}
     >
       {renderIcon()}

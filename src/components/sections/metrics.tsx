@@ -1,7 +1,32 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Metrics() {
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!sectionRef.current) return;
+
+      gsap.from(sectionRef.current.children, {
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+        opacity: 0,
+        y: 40,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power4.out",
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const metrics = [
     {
@@ -25,7 +50,7 @@ export default function Metrics() {
     <section
       id="metrics"
       ref={sectionRef}
-      className="w-full bg-cream border-gray-200 grid grid-cols-1 md:grid-cols-3 border-y"
+      className="w-full bg-transparent border-gray-200 grid grid-cols-1 md:grid-cols-3 border-y"
     >
       {metrics.map((metric, idx) => (
         <div
@@ -39,7 +64,7 @@ export default function Metrics() {
         >
           <h2
             id={`${metric.id}-value`}
-            className="font-display text-4xl md:text-7xl font-extrabold text-black leading-none mb-4 text-center"
+            className="font-display text-4xl md:text-6xl font-extrabold text-black leading-none mb-4 text-center"
           >
             {metric.value}
           </h2>

@@ -8,6 +8,7 @@ interface SectionCardProps {
   description?: string;
   features?: string[];
   metrics?: Record<string, string>[];
+  onAction?: () => void;
 }
 
 export default function SectionCard({
@@ -16,10 +17,13 @@ export default function SectionCard({
   description = "Lorem Ipsum",
   features = [],
   metrics = [],
+  onAction,
 }: SectionCardProps) {
   return (
     <div
-      className="group px-10 py-12 flex flex-row rounded-3xl bg-white border border-gray-100 hover:border-accent/10 
+      className="
+    
+      group px-6 py-8 md:px-10 md:py-12 flex flex-col md:flex-row rounded-3xl bg-white border border-gray-100 hover:border-accent/10 
     transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px] overflow-hidden relative hover:scale-[1.02] hover:shadow-accent-light"
     >
       <div id="left-content" className="flex flex-col gap-3 flex-1">
@@ -33,13 +37,18 @@ export default function SectionCard({
           </div>
           <h3
             id="header-title"
-            className="font-display text-3xl font-bold font-stretch-50% text-black group-hover:text-accent transition-colors transition-200 max-w-lg leading-8"
+            className="font-display text-xl md:text-3xl font-bold font-stretch-50% text-black group-hover:text-accent transition-colors transition-200 max-w-lg leading-tight"
           >
             {title}
           </h3>
         </div>
-        <p className="text-gray-600 leading max-w-2xl">{description}</p>
-        <div id="pills-container" className="flex flex-row gap-2 py-2">
+        <p className="text-gray-600 text-sm md:text-base leading-normal md:leading-relaxed max-w-2xl">
+          {description}
+        </p>
+        <div
+          id="pills-container"
+          className="flex flex-row gap-2 py-2 overflow-x-auto no-scrollbar md:flex-wrap"
+        >
           {features.map((feat, index) => (
             <Pill key={index} label={feat} />
           ))}
@@ -48,12 +57,12 @@ export default function SectionCard({
 
       <div
         id="divider"
-        className="absolute right-[30%] inset-y-8 w-px bg-gray-200 rounded-full"
+        className="hidden md:block absolute right-[30%] inset-y-8 w-px bg-gray-200 rounded-full"
       ></div>
 
       <div
         id="right-content"
-        className="flex flex-row pl-10 w-[28%] items-center justify-between"
+        className="flex flex-row md:pl-10 w-full md:w-[28%] items-center justify-between border-t border-gray-100 mt-6 pt-6 md:border-t-0 md:mt-0"
       >
         <div className="space-y-5 flex flex-col justify-center">
           {metrics.map((metric, i) => {
@@ -71,7 +80,7 @@ export default function SectionCard({
             );
           })}
         </div>
-        <IconButton icon={ArrowRight} />
+        <IconButton icon={ArrowRight} onClick={onAction} />
       </div>
     </div>
   );

@@ -44,19 +44,29 @@ export default function TopNavBar({}: TopNavBarProps) {
         setActiveSection("contact");
       }
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
 
-    if (navRef.current) {
-      gsap.to(navRef.current, {
-        opacity: 1,
-        duration: 0.8,
-        delay: 0.5,
-        ease: "power2.out",
-      });
-    }
+    const ctx = gsap.context(() => {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      handleScroll(); // Initial check
 
-    return () => window.removeEventListener("scroll", handleScroll);
+      if (navRef.current) {
+        gsap.fromTo(
+          navRef.current,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.8,
+            delay: 0.5,
+            ease: "power2.out",
+          },
+        );
+      }
+    }, navRef);
+
+    return () => {
+      ctx.revert();
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [location.pathname]);
 
   useEffect(() => {
@@ -92,7 +102,7 @@ export default function TopNavBar({}: TopNavBarProps) {
   }, [isMenuOpen]);
 
   const navLinks = [
-    { name: "Home", href: "/", isExternal: false, sectionId: "hero" },
+    { name: "Home", href: "/", isExternal: true, sectionId: "hero" },
     {
       name: "Services",
       href: "/#services-sticky",
@@ -109,7 +119,7 @@ export default function TopNavBar({}: TopNavBarProps) {
     {
       name: "Contact",
       href: "/contact",
-      isExternal: true,
+      isExternal: false,
       sectionId: "contact",
     },
   ];
@@ -121,7 +131,7 @@ export default function TopNavBar({}: TopNavBarProps) {
       <nav
         id="topnavbar"
         ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-6 md:px-12 py-5 transition-all duration-500 opacity-0 ${
+        className={`fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-6 md:px-12 py-5 transition-all duration-500 ${
           isScrolled
             ? isDarkBg
               ? "bg-black/20 backdrop-blur-xl border-b border-white/10"

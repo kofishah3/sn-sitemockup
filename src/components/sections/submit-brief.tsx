@@ -1,13 +1,46 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BriefForm from "../input/brief-form";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function SubmitBrief() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (contentRef.current) {
+        gsap.from(contentRef.current.children, {
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: 30,
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
       id="cta"
-      className="bg-black py-24 px-6 md:px-12 gap-20 
+      ref={sectionRef}
+      className="bg-black py-18 px-6 md:px-12 gap-20 
        overflow-hidden items-center flex justify-center"
     >
-      <div className="items-center justify-between flex flex-col md:flex-row lg:max-w-8xl">
+      <div
+        ref={contentRef}
+        className="items-center justify-between flex flex-col md:flex-row lg:max-w-8xl"
+      >
         <div className="z-10">
           <h2 className="font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-white mb-6">
             Ready to build your{" "}

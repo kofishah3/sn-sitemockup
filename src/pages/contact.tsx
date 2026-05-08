@@ -1,14 +1,11 @@
 import { ChevronDownCircle, Mail } from "lucide-react";
 import { IconPill } from "../components/ui/pill";
-import TopNavBar from "../components/navigation/top-navbar";
-import Footer from "../components/navigation/footer";
 import BriefForm from "../components/input/brief-form";
 import DiscoveryCall from "../components/sections/discovery-call";
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-bg flex flex-col">
-      <TopNavBar />
+    <div className="flex flex-col">
       <div className="grow flex flex-col items-center justify-center gap-5 px-6 mt-32 mb-24">
         <div className="w-full max-w-4xl flex flex-col gap-6 text-black text-center items-center">
           <h2 className="font-display font-extrabold text-4xl md:text-6xl ">
@@ -51,7 +48,6 @@ export default function ContactPage() {
         <div className="mb-5"></div>
         <DiscoveryCall />
       </div>
-      <Footer />
 
       <style>{`
         @keyframes bounce {
@@ -66,6 +62,6 @@ export default function ContactPage() {
           animation: bounce 2s infinite ease-in-out;
         }
       `}</style>
-    </main>
+    </div>
   );
 }
