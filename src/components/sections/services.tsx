@@ -1,7 +1,20 @@
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BotMessageSquare, Folder, Megaphone, Pencil } from "lucide-react";
 import SectionCard from "../ui/section-card";
+import { useSelection } from "../../context/SelectionContext";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
+  const { setSelectedService } = useSelection();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
   const services = [
     {
       icon: Folder,
@@ -29,8 +42,7 @@ export default function Services() {
       features: [
         "Campaign Coordination",
         "Social & Email",
-        "Marketing Admin",
-        "Marketing Reporting",
+        "Marketing Admin & Reporting",
         "Research Preparation",
       ],
       metrics: [{ "Campaign Rhythm": "Weekly" }, { "Ramp Time": "2 weeks" }],
@@ -66,39 +78,137 @@ export default function Services() {
     },
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (headerRef.current) {
+        gsap.from(headerRef.current.children, {
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+          opacity: 0,
+          y: 30,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
+        });
+      }
+
+      if (cardsContainerRef.current && cardsRef.current.length > 0) {
+        const cards = cardsRef.current.filter((el) => el !== null);
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: `+=${services.length * 100}%`,
+            pin: true,
+            scrub: 1,
+          },
+        });
+
+        cards.forEach((card, index) => {
+          if (index === 0) {
+            gsap.set(card, { zIndex: 10 + index, y: 0, opacity: 1, scale: 1 });
+          } else {
+            gsap.set(card, {
+              zIndex: 10 + index,
+              y: "150%",
+              opacity: 0,
+              scale: 0.9,
+            });
+          }
+        });
+
+        cards.forEach((card, index) => {
+          if (index > 0) {
+            const prevCard = cards[index - 1];
+
+            tl.to(
+              card,
+              {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                ease: "power2.inOut",
+              },
+              `card-${index}`,
+            );
+
+            tl.to(
+              prevCard,
+              {
+                scale: 0.9,
+                opacity: 0,
+                y: "-20%",
+                duration: 1,
+                ease: "power2.inOut",
+              },
+              `card-${index}`,
+            );
+          }
+        });
+      }
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [services.length]);
+
   return (
     <div
       id="services-sticky"
-      className="min-h-screen bg-bg flex flex-col items-center py-24"
+      ref={containerRef}
+      className="min-h-screen bg-transparent flex flex-col items-center overflow-hidden"
     >
-      <div
-        id="header"
-        className="w-fill h-auto max-w-xl md:max-w-3xl py-10 items-center justify-center flex flex-col gap-5 mb-10"
-      >
-        <h2 className="font-extrabold text-4xl lg:text-5xl max-w-3xl text-center">
-          <span className="text-accent italic"> Service </span> tracks built for
-          modern teams
-        </h2>
-        <p className="text-lg max-w-3xl text-center">
-          Start with the function you need most. We shape support around the
-          workflow, coverage window, and communication style your team already
-          runs on.
-        </p>
-      </div>
-      <div
-        id="services-container"
-        className="flex flex-col gap-5 w-full h-auto max-w-6xl"
-      >
-        {services.map((service) => (
-          <SectionCard
-            key={service.id}
-            icon={service.icon}
-            title={service.title}
-            description={service.description}
-            features={service.features}
-            metrics={service.metrics}
-          />
-        ))}
+      <div className="w-full px-6 lg:px-12 flex flex-col items-center">
+        <div
+          id="header"
+          ref={headerRef}
+          className="w-full min-h-[20vh] flex flex-col items-center justify-center gap-5 pt-20 pb-3 md:pt-32 md:pb-20"
+        >
+          <h2 className="font-extrabold text-3xl md:text-5xl lg:text-6xl max-w-4xl text-center leading-[1.1]">
+            <span className="text-accent italic"> Service </span> tracks built
+            for modern teams
+          </h2>
+          <p className="text-sm md:text-lg max-w-2xl text-center text-gray-600">
+            Start with the function you need most. We shape support around the
+            workflow, coverage window, and communication style your team already
+            runs on.
+          </p>
+        </div>
+
+        <div
+          id="services-cards-wrapper"
+          ref={cardsContainerRef}
+          className="relative w-full min-h-[60vh] md:min-h-[50vh] flex items-start justify-center"
+          style={{ perspective: "1200px" }}
+        >
+          {services.map((service, index) => (
+            <div
+              key={service.id}
+              ref={(el) => {
+                cardsRef.current[index] = el;
+              }}
+              className="absolute inset-x-0 mx-auto w-full max-w-6xl px-4 will-change-transform"
+            >
+              <SectionCard
+                icon={service.icon}
+                title={service.title}
+                description={service.description}
+                features={service.features}
+                metrics={service.metrics as Record<string, string>[]}
+                onAction={() => {
+                  setSelectedService(service.title);
+                  document
+                    .getElementById("cta")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

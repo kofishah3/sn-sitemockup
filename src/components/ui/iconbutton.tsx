@@ -23,7 +23,7 @@ export default function IconButton({
         bg-black text-white
         transition-all duration-300 ease-out
         hover:scale-110 hover:bg-accent hover:rotate-3
-        active:scale-95
+        active:scale-95 cursor-pointer
         ${className}
       `}
     >

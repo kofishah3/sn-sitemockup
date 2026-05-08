@@ -14,6 +14,9 @@
   --color-accent-light: var(--accent-light);
   --color-accent-mid: var(--accent-mid);
 
+  --color-input-bg: var(--input-bg);
+  --color-input-hover: var(--input-hover);
+
   --color-bg: var(--color-white);
   --color-surface: var(--color-cream);
 
@@ -32,6 +35,8 @@
   --accent: #0784ad;
   --accent-light: #e1f4fa;
   --accent-mid: #44aacc;
+  --input-bg: #edf1f2;
+  --input-hover: #e2e8ea;
   --font-display: "Syne", sans-serif;
   --font-body: "DM Sans", sans-serif;
 }
@@ -64,5 +69,15 @@
   h5,
   h6 {
     font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

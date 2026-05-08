@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
+import { useSelection } from "../../context/SelectionContext";
 
 import { Link } from "react-router-dom";
 
@@ -22,10 +23,16 @@ export default function BriefForm({
   showContactLink = true,
 }: BriefFormProps) {
   const isLight = variant === "light";
+  const { selectedService, setSelectedService } = useSelection();
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(selectedService);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  // Sync with global state
+  useEffect(() => {
+    setSelected(selectedService);
+  }, [selectedService]);
 
   useEffect(() => {
     if (isOpen) {
@@ -51,16 +58,16 @@ export default function BriefForm({
   }, []);
 
   const labelClasses =
-    "text-[10px] text-gray-400 uppercase tracking-[0.15em] font-bold";
+    "text-[10px] text-gray-500 uppercase tracking-[0.15em] font-bold";
 
   const inputClasses = isLight
-    ? "bg-[#edf1f2] border border-transparent rounded-xl px-4 py-4 text-sm text-gray-900 outline-none focus:border-accent/30 focus:bg-[#e6ebed] transition-all placeholder:text-gray-400 w-full"
-    : "bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm text-white outline-none focus:border-accent/50 focus:bg-accent/5 transition-all w-full";
+    ? "bg-input-bg border border-transparent rounded-xl px-4 py-4 text-sm text-gray-900 outline-none hover:bg-input-hover focus:border-accent/30 focus:bg-input-hover transition-all placeholder:text-gray-500 w-full"
+    : "bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm text-white outline-none hover:bg-white/10 focus:border-accent/50 focus:bg-accent/5 transition-all w-full placeholder:text-white/30";
 
   const dropdownClasses = isLight
-    ? `bg-[#edf1f2] border border-transparent rounded-xl px-4 py-4 text-sm ${
-        selected ? "text-gray-900" : "text-gray-400"
-      } cursor-pointer flex justify-between items-center transition-all hover:bg-[#e6ebed]`
+    ? `bg-input-bg border border-transparent rounded-xl px-4 py-4 text-sm ${
+        selected ? "text-gray-900" : "text-gray-500"
+      } cursor-pointer flex justify-between items-center transition-all hover:bg-input-hover`
     : `bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-sm ${
         selected ? "text-white" : "text-white/40"
       } cursor-pointer flex justify-between items-center transition-all hover:bg-white/10`;
@@ -122,6 +129,7 @@ export default function BriefForm({
                     className={itemClasses}
                     onClick={() => {
                       setSelected(service);
+                      setSelectedService(service);
                       setIsOpen(false);
                     }}
                   >
