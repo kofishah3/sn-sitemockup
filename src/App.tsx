@@ -1,23 +1,64 @@
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import TopNavBar from "./components/navigation/top-navbar";
+import SubmitBrief from "./components/sections/submit-brief";
 import Hero from "./components/sections/hero";
+import Metrics from "./components/sections/metrics";
+import Services from "./components/sections/services";
+import ContactPage from "./pages/contact";
+import Footer from "./components/navigation/footer";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { SelectionProvider } from "./context/SelectionContext";
+import { ModalProvider } from "./context/ModalContext";
+import OutOfScopeModal from "./components/ui/OutOfScopeModal";
+import InteractiveBackground from "./components/ui/interactive-background";
+import ScrollToTop from "./components/navigation/scroll-to-top";
 
-function App() {
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+function HomePage() {
   return (
-    <main className="min-h-screen bg-bg text-black font-body overflow-y-scroll scroll-smooth">
-      <TopNavBar />
+    <>
       <Hero />
-      
-      {/* Placeholder sections for navigation */}
-      <div id="services-sticky" className="h-screen bg-cream flex items-center justify-center">
-        <h2 className="text-4xl font-display font-bold">Services Section</h2>
+      <Metrics />
+      <Services />
+      <SubmitBrief />
+    </>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+
+  return (
+    <main className="min-h-screen w-full text-black font-body flex flex-col relative overflow-x-hidden">
+      <InteractiveBackground />
+      <OutOfScopeModal />
+      <TopNavBar />
+      <div className="grow relative z-10" key={location.pathname}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Routes>
       </div>
-      <div id="cta" className="h-screen bg-white flex items-center justify-center">
-        <h2 className="text-4xl font-display font-bold">CTA / Contact Section</h2>
-      </div>
+      <Footer />
     </main>
   );
 }
 
-export default App;
+function App() {
+  return (
+    <ModalProvider>
+      <SelectionProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <AppContent />
+        </BrowserRouter>
+      </SelectionProvider>
+    </ModalProvider>
+  );
+}
 
+export default App;

@@ -1,37 +1,42 @@
 @import "tailwindcss";
 
 @theme {
-  --color-black: #0e0e0c;
-  --color-white: #f7f6f2;
-  --color-cream: #f0ede6;
+  --color-black: var(--black);
+  --color-white: var(--white);
+  --color-cream: var(--cream);
 
-  --color-gray-100: #e8e4dc;
-  --color-gray-200: #d4cfc5;
-  --color-gray-400: #9e9a91;
-  --color-gray-600: #5c5952;
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-400: var(--gray-400);
+  --color-gray-600: var(--gray-600);
 
-  --color-accent: #2d5be3;
-  --color-accent-light: #e8eefb;
-  --color-accent-mid: #6b8ef0;
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-mid: var(--accent-mid);
+
+  --color-input-bg: var(--input-bg);
+  --color-input-hover: var(--input-hover);
 
   --color-bg: var(--color-white);
   --color-surface: var(--color-cream);
 
-  --font-display: "Syne", sans-serif;
-  --font-body: "DM Sans", sans-serif;
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
 }
 
 :root {
-  --black: #0e0e0c;
+  --black: #18181b;
   --white: #f7f6f2;
-  --cream: #f0ede6;
+  --cream: #f8f5ed;
   --gray-100: #e8e4dc;
   --gray-200: #d4cfc5;
   --gray-400: #9e9a91;
   --gray-600: #5c5952;
-  --accent: #2d5be3;
-  --accent-light: #e8eefb;
-  --accent-mid: #6b8ef0;
+  --accent: #0784ad;
+  --accent-light: #e1f4fa;
+  --accent-mid: #44aacc;
+  --input-bg: #edf1f2;
+  --input-hover: #e2e8ea;
   --font-display: "Syne", sans-serif;
   --font-body: "DM Sans", sans-serif;
 }
@@ -54,7 +59,9 @@
     background: var(--white);
     color: var(--black);
     overflow-x: hidden;
-    @apply antialiased;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1,
@@ -64,5 +71,15 @@
   h5,
   h6 {
     font-family: var(--font-display);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
