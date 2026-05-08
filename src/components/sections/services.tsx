@@ -1,9 +1,23 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { BotMessageSquare, Folder, Megaphone, Pencil } from "lucide-react";
+import {
+  BotMessageSquare,
+  Folder,
+  Megaphone,
+  Pencil,
+  type LucideIcon,
+} from "lucide-react";
 import SectionCard from "../ui/section-card";
 import { useSelection } from "../../context/SelectionContext";
 
+interface Service {
+  icon: LucideIcon;
+  id: string;
+  title: string;
+  description: string;
+  features: string[];
+  metrics: Record<string, string>[];
+}
 
 export default function Services() {
   const { setSelectedService } = useSelection();
@@ -24,7 +38,7 @@ export default function Services() {
     }
   };
 
-  const services = [
+  const services: Service[] = [
     {
       icon: Folder,
       id: "executive",
@@ -131,33 +145,32 @@ export default function Services() {
         });
 
         cards.forEach((card, index) => {
-          if (index > 0) {
-            const prevCard = cards[index - 1];
+          if (index === 0) return;
+          const prevCard = cards[index - 1];
 
-            tl.to(
-              card,
-              {
-                y: 0,
-                opacity: 1,
-                scale: 1,
-                duration: 1,
-                ease: "power2.inOut",
-              },
-              `card-${index}`,
-            );
+          tl.to(
+            card,
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            `card-${index}`,
+          );
 
-            tl.to(
-              prevCard,
-              {
-                scale: 0.9,
-                opacity: 0,
-                y: "-20%",
-                duration: 1,
-                ease: "power2.inOut",
-              },
-              `card-${index}`,
-            );
-          }
+          tl.to(
+            prevCard,
+            {
+              scale: 0.9,
+              opacity: 0,
+              y: "-20%",
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            `card-${index}`,
+          );
         });
       }
     }, containerRef);
@@ -207,7 +220,7 @@ export default function Services() {
                 title={service.title}
                 description={service.description}
                 features={service.features}
-                metrics={service.metrics as Record<string, string>[]}
+                metrics={service.metrics}
                 onAction={() => {
                   setSelectedService(service.title);
                   scrollToCTA();
