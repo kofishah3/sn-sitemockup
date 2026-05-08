@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BriefForm from "../input/brief-form";
 
-gsap.registerPlugin(ScrollTrigger);
 
 export default function SubmitBrief() {
   const sectionRef = useRef<HTMLElement>(null);

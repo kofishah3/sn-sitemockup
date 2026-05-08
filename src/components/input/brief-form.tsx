@@ -1,7 +1,10 @@
 import { useState, useRef, useEffect } from "react";
+
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
 import { useSelection } from "../../context/SelectionContext";
+import { useModal } from "../../context/ModalContext";
+
 
 import { Link } from "react-router-dom";
 
@@ -24,6 +27,8 @@ export default function BriefForm({
 }: BriefFormProps) {
   const isLight = variant === "light";
   const { selectedService, setSelectedService } = useSelection();
+  const { openOutOfScope } = useModal();
+
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(selectedService);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -81,15 +86,19 @@ export default function BriefForm({
     : "px-4 py-3 text-sm text-gray-300 hover:bg-accent hover:text-white cursor-pointer transition-colors";
 
   const footerLinkClasses = isLight
-    ? "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent underline decoration-gray-300 underline-offset-8 mt-4"
-    : "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent-mid underline underline-offset-8 mt-4";
+    ? "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent underline decoration-gray-300 underline-offset-8"
+    : "text-sm font-semibold text-gray-400 text-center cursor-pointer hover:text-accent-mid underline underline-offset-8";
 
   return (
     <div className="relative z-10 w-full max-w-xl mx-auto">
       <form
         className="flex flex-col gap-6"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          openOutOfScope();
+        }}
       >
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-3">
             <label className={labelClasses}>Your name</label>
@@ -162,11 +171,11 @@ export default function BriefForm({
         {showContactLink && (
           <Link
             to="/contact"
+            state={{ scrollToBottom: true }}
             id="access-contact"
             className={footerLinkClasses}
-            onClick={() => window.scrollTo(0, 0)}
           >
-            Prefer to contact us directly?
+            Prefer a live conversation?
           </Link>
         )}
       </form>

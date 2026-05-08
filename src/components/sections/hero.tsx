@@ -1,15 +1,17 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Button from "../ui/button";
 import Pill from "../ui/pill";
 import { ChevronDownCircle } from "lucide-react";
 import { useSelection } from "../../context/SelectionContext";
+import { useModal } from "../../context/ModalContext";
 
-gsap.registerPlugin(ScrollTrigger);
+
 
 export default function Hero() {
   const { setSelectedService } = useSelection();
+  const { openOutOfScope } = useModal();
+
   const sectionRef = useRef<HTMLElement>(null);
 
   const h1Ref = useRef<HTMLHeadingElement>(null);
@@ -18,6 +20,17 @@ export default function Hero() {
   const pillsRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLElement>(null);
+
+  const scrollToElement = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      gsap.to(window, {
+        duration: 1.2,
+        scrollTo: { y: el, offsetY: 80 },
+        ease: "power4.inOut",
+      });
+    }
+  };
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -134,21 +147,14 @@ export default function Hero() {
             id="heroPrimaryBtn"
             label="Submit a brief →"
             variant="primary"
-            onClick={() =>
-              document
-                .getElementById("cta")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={openOutOfScope}
           />
+
           <Button
             id="heroSecondaryBtn"
             label="Explore services"
             variant="secondary"
-            onClick={() =>
-              document
-                .getElementById("services-sticky")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+            onClick={() => scrollToElement("services-sticky")}
           />
         </div>
 
@@ -169,9 +175,7 @@ export default function Hero() {
               label={label}
               onClick={() => {
                 setSelectedService(label);
-                document
-                  .getElementById("cta")
-                  ?.scrollIntoView({ behavior: "smooth" });
+                scrollToElement("cta");
               }}
             />
           ))}
@@ -182,11 +186,7 @@ export default function Hero() {
         id="heroScrollBtn"
         ref={scrollRef}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 cursor-pointer opacity-0 z-10"
-        onClick={() =>
-          document
-            .getElementById("services-sticky")
-            ?.scrollIntoView({ behavior: "smooth" })
-        }
+        onClick={() => scrollToElement("services-sticky")}
       >
         <ChevronDownCircle
           size={32}
