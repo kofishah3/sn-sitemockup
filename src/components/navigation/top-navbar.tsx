@@ -4,12 +4,13 @@ import gsap from "gsap";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useModal } from "../../context/ModalContext";
-
+import { useTheme } from "../../context/ThemeContext";
 
 interface TopNavBarProps {}
 
 export default function TopNavBar({}: TopNavBarProps) {
   const { openOutOfScope } = useModal();
+  const { showHeroBg } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const [isDarkBg, setIsDarkBg] = useState(false);
@@ -25,17 +26,10 @@ export default function TopNavBar({}: TopNavBarProps) {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      const ctaSection = document.getElementById("cta");
-      if (ctaSection) {
-        const rect = ctaSection.getBoundingClientRect();
-        setIsDarkBg(rect.top <= 80);
-      } else {
-        setIsDarkBg(false);
-      }
+      const sectionIds = ["hero", "services-sticky", "cta"];
+      let current = "hero";
 
       if (location.pathname === "/") {
-        const sectionIds = ["hero", "services-sticky", "cta"];
-        let current = "hero";
         for (const id of sectionIds) {
           const el = document.getElementById(id);
           if (el) {
@@ -49,6 +43,20 @@ export default function TopNavBar({}: TopNavBarProps) {
       } else {
         setActiveSection("contact");
       }
+
+      // Navbar should be in dark mode (white text) if:
+      // 1. We are in hero section on the home page and background image is toggled ON
+      // 2. We are in the cta section (which has a dark background)
+      const isHeroDark = location.pathname === "/" && current === "hero" && showHeroBg;
+
+      const ctaSection = document.getElementById("cta");
+      let isOverCta = false;
+      if (ctaSection) {
+        const rect = ctaSection.getBoundingClientRect();
+        isOverCta = rect.top <= 80;
+      }
+
+      setIsDarkBg(isHeroDark || isOverCta);
     };
 
     const ctx = gsap.context(() => {
@@ -72,7 +80,7 @@ export default function TopNavBar({}: TopNavBarProps) {
       ctx.revert();
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [location.pathname]);
+  }, [location.pathname, showHeroBg]);
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -138,11 +146,21 @@ export default function TopNavBar({}: TopNavBarProps) {
       href: "/#services-sticky",
       sectionId: "services-sticky",
     },
-    { name: "About Us", href: "#", onClick: (e: React.MouseEvent) => { e.preventDefault(); openOutOfScope(); } },
+    {
+      name: "About Us",
+      href: "#",
+      onClick: (e: React.MouseEvent) => {
+        e.preventDefault();
+        openOutOfScope();
+      },
+    },
     {
       name: "Meet the Team",
       href: "#",
-      onClick: (e: React.MouseEvent) => { e.preventDefault(); openOutOfScope(); }
+      onClick: (e: React.MouseEvent) => {
+        e.preventDefault();
+        openOutOfScope();
+      },
     },
 
     {
@@ -240,8 +258,11 @@ export default function TopNavBar({}: TopNavBarProps) {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={link.onClick || ((e) => handleNavClick(e, link.href as string, link.sectionId))}
-
+                onClick={
+                  link.onClick ||
+                  ((e) =>
+                    handleNavClick(e, link.href as string, link.sectionId))
+                }
                 className={`text-[13px] transition-all duration-300 relative group ${
                   isActive
                     ? isDarkBg
@@ -279,7 +300,6 @@ export default function TopNavBar({}: TopNavBarProps) {
           >
             Log In
           </button>
-
 
           <button
             id="desktop-getstarted"
@@ -344,8 +364,11 @@ export default function TopNavBar({}: TopNavBarProps) {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={link.onClick || ((e) => handleNavClick(e, link.href as string, link.sectionId))}
-
+                onClick={
+                  link.onClick ||
+                  ((e) =>
+                    handleNavClick(e, link.href as string, link.sectionId))
+                }
                 className={`text-2xl font-display font-bold tracking-tight transition-colors ${
                   isActive ? "text-black" : "text-gray-400 hover:text-black"
                 }`}
@@ -354,13 +377,15 @@ export default function TopNavBar({}: TopNavBarProps) {
               </a>
             );
           })}
-          <button 
-            onClick={() => { setIsMenuOpen(false); openOutOfScope(); }}
+          <button
+            onClick={() => {
+              setIsMenuOpen(false);
+              openOutOfScope();
+            }}
             className="text-2xl font-display font-bold tracking-tight text-gray-400 hover:text-black transition-colors cursor-pointer"
           >
             Log In
           </button>
-
 
           <button
             onClick={() => {

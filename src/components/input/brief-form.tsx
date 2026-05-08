@@ -5,7 +5,6 @@ import { gsap } from "gsap";
 import { useSelection } from "../../context/SelectionContext";
 import { useModal } from "../../context/ModalContext";
 
-
 import { Link } from "react-router-dom";
 
 const SERVICES = [
@@ -34,7 +33,6 @@ export default function BriefForm({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Sync with global state
   useEffect(() => {
     setSelected(selectedService);
   }, [selectedService]);
@@ -98,13 +96,12 @@ export default function BriefForm({
           openOutOfScope();
         }}
       >
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-3">
             <label className={labelClasses}>Your name</label>
             <input
               type="text"
-              placeholder="Ceferino Jumao-as"
+              placeholder="FirstName LastName"
               className={inputClasses}
             />
           </div>
@@ -112,7 +109,7 @@ export default function BriefForm({
             <label className={labelClasses}>Email</label>
             <input
               type="email"
-              placeholder="cef@company.com"
+              placeholder="yourname@domain.com"
               className={inputClasses}
             />
           </div>

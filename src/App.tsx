@@ -12,6 +12,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SelectionProvider } from "./context/SelectionContext";
 import { ModalProvider } from "./context/ModalContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import OutOfScopeModal from "./components/ui/OutOfScopeModal";
 import InteractiveBackground from "./components/ui/interactive-background";
 import ScrollToTop from "./components/navigation/scroll-to-top";
@@ -52,10 +53,12 @@ function App() {
   return (
     <ModalProvider>
       <SelectionProvider>
-        <BrowserRouter>
-          <ScrollToTop />
-          <AppContent />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <ScrollToTop />
+            <AppContent />
+          </BrowserRouter>
+        </ThemeProvider>
       </SelectionProvider>
     </ModalProvider>
   );
